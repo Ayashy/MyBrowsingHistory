@@ -14,23 +14,34 @@ d3.json("data/BrowserHistory.json", function (json) {
     var data = json["Browser History"]
     for (var i = 0; i < 20; i++) {
         var obj = data[i];
-        //graph.nodes.push({ 'cat': Math.floor(10 * Math.random()) })
+        graph.nodes.push({ 'cat': Math.floor(10 * Math.random()) })
         if (obj["page_transition"] == "LINK") {
             graph.links.push({ "source": i + 1, "target": i })
         }
     }
 });
 
-console.log(graph)
-
-// Generate random nodes 
-var nb_nodes = 20, nb_cat = 10;
-
 graph.nodes = d3.range(nb_nodes).map(function(d,i) {  
   return {cat: Math.floor(nb_cat * Math.random())}; 
 })
 
 
+// Generate random nodes 
+var nb_nodes = 10, nb_cat = 10;
+
+graph.nodes = d3.range(nb_nodes).map(function(d,i) {  
+  return {cat: Math.floor(nb_cat * Math.random())}; 
+})
+
+graph.nodes.map(function(d, i) {
+  graph.nodes.map(function(e, j) {
+    if(Math.random()>.99 && i!=j)
+      graph.links.push({"source": i, "target": j})
+
+  });
+});
+
+console.log(graph)
 
 var link = svg.selectAll(".link"),
     node = svg.selectAll(".node"),
