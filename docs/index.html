@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<header>
+	<div class="container">
+		<div class="row logo">
+		    <img src="image/logo.PNG">
+	    </div>
+	    <div class="row menu">
+		    <ul>
+			  <li><a href="index.html">Home</a></li>
+			  <li><a href="dashboard.html">Dashboard</a></li>
+			</ul>
+	    </div>
+	</div>
+</header>
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="titre">
+				Introduction
+			</div>
+			<div class="graphe">
+				<p>
+					Depuis plusieurs années, Google est devenu un géant de la data. A travers l’utilisation
+					de ses services, qui sont devenus indispensable à notre vie quotidienne, l’entreprise collecte
+					une quantité énorme de données de chaque individu et les stocke dans des data centers
+					afin de les analyser et connaître le profil de chaque utilisateur de ses services. Google
+					en sait donc bien plus que nous l’imaginons à notre sujet. Et c’est pourquoi, à travers
+					ce projet, nous voulons récupérer une partie de nos données stockées chez Google, la
+					traiter et l’analyser à notre manière, pour avoir un aperçu de ce que nous pouvons sortir
+					de ses données bruts avec des outils de traitements, d’analyses et de visualisation. Ce
+					sous ensemble de nos données est notre historique de recherche sur le navigateur Google
+					Chrome.
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="titre">
+				What is the question you want to answer ?
+			</div>
+			<div class="graphe">
+				<p>
+					<ul>
+					  <li>Quels sont les domaines qui nous interessent sur le web ? </li>
+					  <li>Quelles sont les sites dans lesquels nous passons le plus de temps ?</li>
+					</ul>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="titre">
+				Which data do you need ? how do you plan to collect your data ?
+			</div>
+			<div class="graphe">
+				<p>
+					Afin de répondre à ces questions, nous avons besoin de nos historiques respectifs de
+					navigation, qui sont collectés et stockés via le service Google Chrome, et sont à disposition
+					de tout utilisateur désirant les télécharger sur son compte. En effet, Google nous donne
+					accès à ces informations, et nous permet de les avoir sous forme de fichiers JSON (aperçu
+					sur la figure ci-dessous).
+				</p>
+				<p>
+					On suit les instructions qui sont bien définies sur ” ce lien”, dans le site d’assistance
+					officielle de Google.
+				</p>
+				<div class="center"><img src="image/datasource.PNG"></div>
+				<p>
+					En spécifiant les extensions et applications dont on veut telecharger les données. Dans notre cas, ca sera l’historique de notre navigation.
+				</p>
+				<div class="center"><img src="image/datasource4.PNG"></div>
+				<p>
+					La données sont structurées de la manière suivante : elle commence avec "Browser History",
+					ce qui représente l’évènement ou l’activité des services google concernée, puis toute
+					nos requêtes sur google chrome avec les détails suivants time-usec (date et heure de la
+					requête), url (url de la page web), titre (titre html de la page), page-transition (comment
+					la page a été obtenue) et finalement l’ID du client.
+				</p>
+				<div class="center"><img src="image/fichierjson.PNG"></div>
+				<p>
+					Afin de classer ces requêtes par type d’activité, et faire des graphes permettant de
+					visualiser les types d’activités auxquels on consacre le plus de temps et les pages que
+					nous avons tendance à visiter, nous allons devoir générer un autre fichier dans lequel
+					se trouveront plusieurs url de site web sur une colonne et le type d’activité auquel ils
+					appartiennent (sports, informatique, médecine. . . ) dans une autre colonne. Ce fichier sera
+					ensuite joint automatiquement à l’autre afin de classifier notre historique ligne par ligne.
+				</p>
+			</div>
+		</div>
+	</div>
+	
+</div>
+<footer style="height: 100px;">
+	
+</footer>
+</body>
