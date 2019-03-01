@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Homework 2 GitHub Network Graphs</title>
+<style>
+
+.link {
+  stroke: gray;
+  stroke-width: 1.5px;
+}
+
+.node {
+  fill: #66CC66;
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+.node:hover {
+  fill: red;
+}
+
+</style>
+<body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+  <form>
+  Layout:
+    <label><input type="radio" name="layout" value="force" checked> Force</label>
+    <label><input type="radio" name="layout" value="random" > Random</label>
+    <label><input type="radio" name="layout" value="radial"> Radial</label>  
+    <label><input type="radio" name="layout" value="line"> Line</label>
+    <label><input type="radio" name="layout" value="line_cat"> Line by Category</label>
+  </form>
+
+  <form>
+  Color:
+    <label><input type="radio" name="color" value="nocolor" checked> None</label>
+    <label><input type="radio" name="color" value="color_cat" > Category</label>
+  </form>
+
+  <form>
+  Size:
+    <label><input type="radio" name="size" value="nosize" checked> None</label>
+    <label><input type="radio" name="size" value="size_cat" > Category</label>
+  </form>
+  
+<script src="script.js">
+
+</script>
+
+</body>
+</html>
