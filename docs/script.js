@@ -1,7 +1,7 @@
 // ------------------------- svg3 init ------------------------//
 
 var width = 600,
-  height = 200;
+  height = 300;
 
 var svg3 = d3.select("#DIAG").append("svg")
   .attr("width", width)
@@ -28,10 +28,11 @@ var nb_nodes = 100, nb_cat = 10;
 
 var idx = 0
 
-d3.json("BrowserHistory.json", function (json) {
-  var entries = json["Browser History"]
+d3.json("data.json", function (json) {
+  var entries = json['Browser History']
   for (var i in entries) {
     var entry = entries.reverse()[i];
+
     var site = entry.url.split('/')[2]
     // Adding the node
     if (site in donnee) {
@@ -178,7 +179,7 @@ function force_layout(date_filter) {
   simulation = d3.forceSimulation(graph.nodes)
     .force("link", d3.forceLink(graph.links).id(d => d.index))
     .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("center", d3.forceCenter(width / 2, height+100 / 2))
     .force("x", d3.forceX())
     .force("y", d3.forceY());
 
@@ -213,7 +214,7 @@ var margin = {top: 10, right: 40, bottom: 10, left: 40},
     height = 100 - margin.top - margin.bottom;
 
 var x = d3.scaleTime()
-    .domain([new Date(2019, 1, 1), new Date(2019, 7, 15) - 1])
+    .domain([new Date(2018, 1, 1), new Date(2018, 12, 15) - 1])
     .rangeRound([0, width]);
 
 var svg4 = d3.select("#SLIDER").append("svg")
