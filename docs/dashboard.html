@@ -9,112 +9,68 @@
 </head>
 
 <body>
-
-	<!--  ------------------  TOP BAR  -------------------- -->
 	<header>
 		<div class="container">
 			<div class="row logo">
-				<img src="image/logo.PNG">
+				<img src="image/logo.png">
 			</div>
 			<div class="row menu">
 				<ul>
 					<li><a href="index.html">Home</a></li>
 					<li><a href="dashboard.html">Dashboard</a></li>
-					<li><a href="treemap.html">Treemap</a></li>
 				</ul>
 			</div>
 		</div>
 	</header>
-
-
-	<!--  ------------------  DASHBOARD CONTAINER -------------------- -->
-
 	<div class="container">
-		<div class="row">
-			<div class="col-lg-6 radius">
-				<div class="titre">
-					<div class="left">TreeMap</div>
-					<div class="right">
-						<form>
-							<label><input type="radio" name="mode" value="sumBySize" checked> Size</label>
-							<label><input type="radio" name="mode" value="sumByCount"> Count</label>
-						</form>
-					</div>
-				</div>
-				<!--  ------------------  svg_TreeMap  -------------------- -->
-				<div id="brush"></div>
-				<div class="graphe">
-					<svg id="svg_TreeMap" width="400" height="400"></svg>
-				</div>
-
-			</div>
-			<div class="col-lg-6 radius">
-				<div class="titre">
-					Node Graph
-				</div>
-
-				<!--  ------------------  svg_NodeGraph  -------------------- -->
-				<div class="graphe">
-					<svg id="svg_NodeGraph" width="100%" height="400"></svg>
-				</div>
-
-			</div>
-
-		</div>
-
-		<!--  ------------------  svg_DateSlider  -------------------- -->
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="titre">
-					Date slider
+					Graphe
 				</div>
-				<div class="graphe">
-					<svg id="svg_DateSlider" width="100%" height="50"></svg>
+				<div class="graphe" id="DIAG">
+				</div>
+			</div>
+
+			<div class="col-lg-12">
+				<div class="titre">
+					Graphe
+				</div>
+				<div class="graphe" id="SLIDER">
 				</div>
 			</div>
 		</div>
-
 		<div class="row">
-			<div class="col-lg-6 radius">
+			<div class="col-lg-12">
 				<div class="titre">
-					<div class="left">Stacked Bar Chart</div>
-					<div class="right">
-						<form>
-							<label><input type="radio" name="mode" value="stacked" checked> Stacked</label>
-							<label><input type="radio" name="mode" value="grouped"> Grouped</label>
-						</form>
-					</div>
+					Tree Map
 				</div>
-
-				<!--  ------------------  svg_BarChart  -------------------- -->
-				<div class="graphe">
-					<svg id="svg_BarChart" width="500" height="400"></svg>
-				</div>
-
-			</div>
-			<div class="col-lg-6 radius">
-				<div class="titre">
-					<div class="left">HeatMap</div>
-				</div>
-
-				<!--  ------------------  svg_HeatMap  -------------------- -->
-				<div class="graphe">
-					<svg id="svg_HeatMap" width="500" height="400"></svg>
-				</div>
-				<div id="dataset-picker">
+				<div class="graphe" id="TM">
+					<svg id="svgtm" width="960" height="570"></svg>
+					<form>
+						<label><input type="radio" name="mode" value="sumBySize" checked> Size</label>
+						<label><input type="radio" name="mode" value="sumByCount"> Count</label>
+					</form>
 				</div>
 			</div>
+			<div class="col-lg-12">
+				<div class="titre">
+					Stacked bar chart
+				</div>
+				<div class="graphe" id="SBC">
+					<form>
+						<label><input type="radio" name="mode" value="stacked" checked> Stacked</label>
+						<label><input type="radio" name="mode" value="grouped"> Grouped</label>
+					</form>
+				</div>
+			</div>
+
 		</div>
 	</div>
 	<footer>
 
 	</footer>
-	<!-- <script src="treemap.js"></script>
- -->
-	<!-- <script src="test.js"></script> -->
-	<script src="TreeMap.js"></script>
-	<script src="NodeGraph.js"></script>
-	<script src="DateSlider.js"></script>
-	<script src="BarChart.js"></script>
-	<script src="HeatMap.js"></script>
+	<script src="treemap.js"></script>
+	<script src="stacked_bar_chart.js"></script>
+	<script src="script.js"></script>
 </body>
