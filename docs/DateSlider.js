@@ -1,33 +1,37 @@
 
-// ################################### SLIDER ###################################
+// --------------------------------------------------------------- //
+// ------------------------------  svg_DateSlider init 
+// --------------------------------------------------------------- //
 
-var margin = { top: 10, right: 40, bottom: 20, left: 40 },
-    width = 960 - margin.left - margin.right,
-    height = 100 - margin.top - margin.bottom;
+var margin = {
+    top: 10, right: 10, bottom: 10, left: 10
+};
+var svg_DateSlider = d3.select("#svg_DateSlider"),
+    svg_DateSlider_width = svg_DateSlider.attr('width') - margin.left - margin.right ,
+    svg_DateSlider_height = svg_DateSlider.attr('height') - margin.top - margin.bottom;
 
-var x = d3.scaleTime()
-    .domain([new Date(2018, 1, 1), new Date(2018, 12, 15) - 1])
-    .rangeRound([0, width]);
-
-var svg_DateSlider = d3.select("#svg_DateSlider")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+svg_DateSlider.attr("width", svg_DateSlider_width + margin.left + margin.right)
+    .attr("height", svg_DateSlider_height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+var x = d3.scaleTime()
+    .domain([new Date(2018, 1, 1), new Date(2018, 12, 15) - 1])
+    .rangeRound([0, svg_DateSlider_width]);
+
 svg_DateSlider.append("g")
     .attr("class", "axis axis--grid")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + svg_DateSlider_height + ")")
     .call(d3.axisBottom(x)
         .ticks(d3.timeHour, 12)
-        .tickSize(-height)
+        .tickSize(-svg_DateSlider_height)
         .tickFormat(function () { return null; }))
     .selectAll(".tick")
     .classed("tick--minor", function (d) { return d.getHours(); });
 
 svg_DateSlider.append("g")
     .attr("class", "axis axis--x")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + svg_DateSlider_height + ")")
     .call(d3.axisBottom(x)
         .ticks(d3.timeMonth)
         .tickPadding(0))
@@ -38,10 +42,12 @@ svg_DateSlider.append("g")
 svg_DateSlider.append("g")
     .attr("class", "brush")
     .call(d3.brushX()
-        .extent([[0, 0], [width, height]])
+        .extent([[0, 0], [svg_DateSlider_width, svg_DateSlider_height]])
         .on("end", brushended));
 
-// -------------------------  DATE CHANGED FUNCTION -------------------------
+// --------------------------------------------------------------- //
+// ---------------- Data change function 
+// --------------------------------------------------------------- //
 
 function brushended() {
 
@@ -88,9 +94,8 @@ function brushended() {
 
     d3.select("#svg_TreeMap").selectAll("g").remove();
 
-    var svg_TREEMAP = d3.select("#svg_TreeMap"),
-        width = +svg_TREEMAP.attr("width"),
-        height = +svg_TREEMAP.attr("height");
+    var svg_TREEMAP = d3.select("#svg_TreeMap")
+
 
     var fader = function (color) { return d3.interpolateRgb(color, "#fff")(0.2); },
         color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
@@ -98,19 +103,25 @@ function brushended() {
 
     var treemap = d3.treemap()
         .tile(d3.treemapResquarify)
-        .size([width, height])
+        .size([svg_DateSlider_width, svg_DateSlider_height])
         .round(true)
         .paddingInner(1);
 
     draw_MT(data, treemap, svg_TREEMAP, color, format)
 
     // --------------------------------------------------------------------------------------
+    // ------------------------------ CHANGES TO BARCHART -----------------------------------
+    // --------------------------------------------------------------------------------------
+
+    draw_barchart(d1)
+
+    // --------------------------------------------------------------------------------------
     // ------------------------------ CHANGES TO HEATMAP ------------------------------------
     // --------------------------------------------------------------------------------------
 
-    // --------------------------------------------------------------------------------------
-    // ------------------------------ CHANGES TO BARCHART -----------------------------------
-    // --------------------------------------------------------------------------------------
+
+
+    draw_heatmap(d1)
 
 
 }

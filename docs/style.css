@@ -1,3 +1,5 @@
+/* Page styles */
+
 body{
 	background-color: #EFEFF5;
 }
@@ -5,9 +7,8 @@ header{
 	margin-top: 10px;
 }
 .row{
-	background-color: white;
 	margin-bottom: 20px;
-	border-radius: 20px;
+	border-radius: 5px;
 }
 .logo{
 	display: block;
@@ -54,7 +55,7 @@ svg {
 /*Style pour stacked bar chart*/
 svg {
 	font: 10px sans-serif;
-	shape-rendering: crispEdges;
+	shape-rendering: geometricPrecision;
 }
 
 .axis path,
@@ -77,15 +78,20 @@ label {
 
 
 .link {
-	stroke: gray;
+	stroke: rgb(17, 15, 15);
+	stroke-width: 3px;
 	stroke-width: 1.5px;
+	stroke-opacity:  0.6;
 }
 
 .node {
-	fill: #66CC66;
-	stroke: #000;
-	stroke-width: 1px;
+	fill: rgb(161, 178, 224);
+	stroke: #999;
+	stroke-width: 1.5px;
+	stroke-opacity:  0.6;
+	fill-opacity:0.7;
 }
+
 
 .node:hover {
 	fill: red;
@@ -115,39 +121,126 @@ div.tooltip {
 	stroke-opacity: .5;
 }
 
-  	/*Style pour Treemap*/
-	  form {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;}
-	  svg {font: 10px sans-serif;}
-	  /*Style pour stacked bar chart*/
-	  svg {
-	  font: 10px sans-serif;
-	  shape-rendering: crispEdges;
-		}
-		.axis path,.axis line {fill: none;stroke: #000;}
-		path.domain {stroke: none;}
-	   .y .tick line {stroke: #ddd;}
+/*Style pour Treemap*/
+form {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.axis path,.axis line {
+	fill: none;
+	stroke: #000;
+}
+path.domain {
+	stroke: none;
+}
+.y .tick line {
+	stroke: #ddd;
+}
+
+label {
+	display:block;	
+}
+
+/* Style pour Heatmap */
+
+rect.bordered {
+	stroke: #E6E6E6;
+	stroke-width:2px;   
+}
+
+text.mono {
+	font-size: 9pt;
+	font-family: Consolas, courier;
+	fill: #aaa;
+}
+
+text.axis-workweek {
+	fill: #000;
+}
+
+text.axis-worktime {
+	fill: #000;	
+}
+
+.svg-content {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 200px;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.slider_container {
+    display: inline-block;
+    position: relative;
+	height: 100px;
+	width: 100%;
+    padding-bottom: 100px;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+
+html { font-size: 62.5%; } 
+
+body {
+	  font-size: 1rem;
+	  font-family: 'Open Sans', sans-serif;
+	  font-weight: 400;
+	  fill: #8C8C8C;
+	  text-align: center;
+}
+
+.timeLabel, .dayLabel {
+	font-size: 1.6rem;
+	fill: #AAAAAA;
+	font-weight: 300;
+}
+
+text.axis-workweek, text.axis-worktime {
+	fill: #404040;
+	font-weight: 400;
+}
+
+.title {
+	font-size: 2.8rem;
+	fill: #4F4F4F;
+	font-weight: 300;
+}
+
+.subtitle {
+	font-size: 1.4rem;
+	fill: #AAAAAA;
+	font-weight: 300;
+}
   
-		label {
-		  display:block;
-		}
+.credit {
+	font-size: 1.2rem;
+	fill: #AAAAAA;
+	font-weight: 400;
+}
 
-		/* Style pour Heatmap */
+.axis path, .axis tick, .axis line {
+	  fill: none;
+	  stroke: none;
+  }
 
-		rect.bordered {
-			stroke: #E6E6E6;
-			stroke-width:2px;   
-		  }
-	
-		  text.mono {
-			font-size: 9pt;
-			font-family: Consolas, courier;
-			fill: #aaa;
-		  }
-	
-		  text.axis-workweek {
-			fill: #000;
-		  }
-	
-		  text.axis-worktime {
-			fill: #000;
-		  }
+text {
+	  font-size: 1.2rem;
+	  fill: #AAAAAA;
+	  font-weight: 400;
+}
+
+.legendTitle {
+	  font-size: 1.6rem;
+	  fill: #4F4F4F;
+	  font-weight: 300;
+}

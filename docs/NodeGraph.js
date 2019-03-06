@@ -1,11 +1,20 @@
-// ------------------------- svg_NodeGraph init ------------------------//
 
-var svg_NodeGraph_width = 600,
-  svg_NodeGraph_height = 300;
+// --------------------------------------------------------------- //
+// ---------------------------- svg_NodeGraph init
+// --------------------------------------------------------------- //
 
-var svg_NodeGraph = d3.select("#svg_NodeGraph")
-  .attr("width", svg_NodeGraph_width)
-  .attr("height", svg_NodeGraph_height);
+var margin = {
+  top: 10, right: 10, bottom: 10, left: 10
+};
+var svg_NodeGraph = d3.select("#svg_NodeGraph"),
+  svg_NodeGraph_width = svg_NodeGraph.attr('width') - margin.left - margin.right,
+  svg_NodeGraph_height = svg_NodeGraph.attr('height') - margin.top - margin.bottom;
+
+svg_NodeGraph.attr("width", svg_NodeGraph_width + margin.left + margin.right)
+  .attr("height", svg_NodeGraph_height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 
 var link = svg_NodeGraph.selectAll(".link"),
   node = svg_NodeGraph.selectAll(".node"),
@@ -13,11 +22,9 @@ var link = svg_NodeGraph.selectAll(".link"),
 
 var simulation;
 
-var tooltip = d3.select("#DIAG").append('div')
-  .attr('class', 'hidden tooltip');
-
-// ---------------------------- DATA parse ------------------------//
-
+var tooltip = d3.select("body").append('div')
+  .attr('class', ' tooltip')
+  .style('visibility', 'hidden')
 
 var donnee = {};
 
@@ -27,17 +34,12 @@ var nb_nodes = 100, nb_cat = 10;
 
 var idx = 0
 
-var entries = {}
-
-d3.json("data.json", function (json) {
-  entries = json['Browser History']
-
-  force_layout([new Date(2013, 2, 1), new Date(2020, 7, 15) - 1]);
-
-});
+var entries = []
 
 
-// ------------------------------  Functions --------------------------------//
+// --------------------------------------------------------------- //
+// ------------------------------  Functions 
+// --------------------------------------------------------------- //
 
 function force_layout(date_filter) {
 
@@ -58,7 +60,7 @@ function force_layout(date_filter) {
       donnee[site].counter += 1
     }
     else {
-      donnee[site] = { "url": site, 'id': idx, "counter": 1 }
+      donnee[site] = { "url": site, 'id': idx, "counter": 1, icon: entry.favicon_url }
       idx = idx + 1
     }
 
@@ -73,9 +75,8 @@ function force_layout(date_filter) {
 
   // ---------------------------- GRAPH init ------------------------//
 
-
   graph.nodes = Object.keys(donnee).map(function (d) {
-    return { cat: Math.floor(nb_cat * Math.random()), size: 10, url: donnee[d].url, prev: donnee[d].prev };
+    return { cat: Math.floor(nb_cat * Math.random()), size: 10, url: donnee[d].url, prev: donnee[d].prev, icon: donnee[d].icon };
   })
 
   graph.nodes.map(function (d, i) {
@@ -84,7 +85,6 @@ function force_layout(date_filter) {
         graph.links.push({ "source": i, "target": j })
     });
   });
-
 
   // ---------------------------------- Generate graph ----------------//
 
@@ -125,25 +125,37 @@ function force_layout(date_filter) {
     .append("line")
     .attr("class", "link")
 
+
+
   node = node.data(graph.nodes)
     .enter()
     .append("g")
+    .attr("background", function (d) { return d.icon; })
     .on('mousemove', function (d, i) {
       var mouse = d3.mouse(svg_NodeGraph.node()).map(function (d) {
         return parseInt(d);
       });
 
-      tooltip.classed('hidden', false)
-        .attr('style', 'left:' + (mouse[0] + 15) + 'px; top:' + (mouse[1] + 150) + 'px')
+      tooltip.style('visibility', 'visible')
+        .attr('style', 'left:' + (mouse[0]) + 'px; top:' + (mouse[1] + 15) + 'px')
         .html(graph.nodes[i].url);
     })
     .on('mouseout', function () {
-      tooltip.classed('hidden', true)
+      tooltip.style('visibility', 'hidden')
+
     })
     .attr("class", "node")
 
   node.append("circle")
-    .attr("r", function (d) { return d.size; })
+    .attr("r", function (d) { return d.size + 1; })
+
+  node.append("image")
+    .attr("xlink:href", function (d) { return d.icon; })
+    .attr("x", function (d) { return 2.5 - d.size; })
+    .attr("y", function (d) { return 2.5 - d.size; })
+    .attr("width", function (d) { return 1.4 * d.size; })
+    .attr("height", function (d) { return 1.4 * d.size; });
+
 
   graph.nodes.forEach(function (d, i) {
     d.x = svg_NodeGraph_width / 4 + 2 * svg_NodeGraph_width * Math.random() / 4;
@@ -151,9 +163,10 @@ function force_layout(date_filter) {
   })
 
   simulation = d3.forceSimulation(graph.nodes)
-    .force("link", d3.forceLink(graph.links).id(d => d.index))
-    .force("charge", d3.forceManyBody())
+    .force("link", d3.forceLink(graph.links).id(d => d.index).distance(function distance() { return 50; }))
+    .force("charge", d3.forceManyBody().strength(-50))
     .force("center", d3.forceCenter(svg_NodeGraph_width / 2, svg_NodeGraph_height / 2))
+    .force("collide", d3.forceCollide().radius(12))
     .force("x", d3.forceX())
     .force("y", d3.forceY());
 
@@ -178,5 +191,24 @@ function graph_update(delay) {
     .attr("transform", function (d) {
       return "translate(" + d.x + "," + d.y + ")";
     });
+
+  function positionLink(d) {
+    var offset = 30;
+
+    var midpoint_x = (d.source.x + d.target.x) / 2;
+    var midpoint_y = (d.source.y + d.target.y) / 2;
+
+    var dx = (d.target.x - d.source.x);
+    var dy = (d.target.y - d.source.y);
+
+    var normalise = Math.sqrt((dx * dx) + (dy * dy));
+
+    var offSetX = midpoint_x + offset * (dy / normalise);
+    var offSetY = midpoint_y - offset * (dx / normalise);
+
+    return "M" + d.source.x + "," + d.source.y +
+      "S" + offSetX + "," + offSetY +
+      " " + d.target.x + "," + d.target.y;
+  }
 
 }

@@ -1,112 +1,187 @@
 
-var svg_Heatmap = d3.select("#svg_HeatMap"),
-    margin = { top: 50, right: 0, bottom: 100, left: 30 },
-    width = svg_BarChart.attr("width") - margin.left - margin.right,
-    height = svg_BarChart.attr("height") - margin.top - margin.bottom,
-    gridSize = Math.floor(width / 24),
-    legendElementWidth = gridSize * 2,
-    buckets = 9,
-    colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"], // alternatively colorbrewer.YlGnBu[9]
-    days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-    times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
-datasets = ["data.tsv"];
+// --------------------------------------------------------------- //
+// ---------------------------- svg_HeatMap init
+// --------------------------------------------------------------- //
 
-svg_Heatmap.append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var accidents = []
 
-var dayLabels = svg_Heatmap.selectAll(".dayLabel")
-    .data(days)
-    .enter().append("text")
-    .text(function (d) { return d; })
-    .attr("x", 0)
-    .attr("y", function (d, i) { return i * gridSize; })
-    .style("text-anchor", "end")
-    .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
-    .attr("class", function (d, i) { return ((i >= 0 && i <= 4) ? "dayLabel mono axis axis-workweek" : "dayLabel mono axis"); });
+var days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+    times = d3.range(24);
 
-var timeLabels = svg_Heatmap.selectAll(".timeLabel")
-    .data(times)
-    .enter().append("text")
-    .text(function (d) { return d; })
-    .attr("x", function (d, i) { return i * gridSize; })
-    .attr("y", 0)
-    .style("text-anchor", "middle")
-    .attr("transform", "translate(" + gridSize / 2 + ", -6)")
-    .attr("class", function (d, i) { return ((i >= 100 && i <= 200) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
-
-var heatmapChart = function (tsvFile) {
-    d3.tsv(tsvFile,
-        function (d) {
-            return {
-                day: +d.day,
-                hour: +d.hour,
-                value: +d.value
-            };
-        },
-        function (error, data) {
-            var colorScale = d3.scaleQuantile()
-                .domain([0, buckets + 300, d3.max(data, function (d) { return d.value; })])
-                .range(colors);
-
-            var cards = svg_Heatmap.selectAll(".hour")
-                .data(data, function (d) { return d.day + ':' + d.hour; });
-
-            cards.append("title");
-
-            cards.enter().append("rect")
-                .attr("x", function (d) { return (d.hour - 1) * gridSize; })
-                .attr("y", function (d) { return (d.day - 1) * gridSize; })
-                .attr("rx", 4)
-                .attr("ry", 4)
-                .attr("class", "hour bordered")
-                .attr("width", gridSize)
-                .attr("height", gridSize)
-                .style("fill", colors[0]);
-
-            cards.transition().duration(1000)
-                .style("fill", function (d) { return colorScale(d.value); });
-
-            cards.select("title").text(function (d) { return d.value; });
-
-            cards.exit().remove();
-
-            var legend = svg_Heatmap.selectAll(".legend")
-                .data([0].concat(colorScale.quantiles()), function (d) { return d; });
-
-            legend.enter().append("g")
-                .attr("class", "legend");
-
-            legend.append("rect")
-                .attr("x", function (d, i) { return legendElementWidth * i; })
-                .attr("y", height)
-                .attr("width", legendElementWidth)
-                .attr("height", gridSize / 2)
-                .style("fill", function (d, i) { return colors[i]; });
-
-            legend.append("text")
-                .attr("class", "mono")
-                .text(function (d) { return "≥ " + Math.round(d); })
-                .attr("x", function (d, i) { return legendElementWidth * i; })
-                .attr("y", height + gridSize);
-
-            legend.exit().remove();
-
-        });
+var margin = {
+    top: 50, right: 50, bottom: 70, left: 50
 };
 
-heatmapChart(datasets[0]);
+var width = 500 - margin.left - margin.right - 20,
+    gridSize = Math.floor(width / times.length),
+    height = gridSize * (days.length + 2);
 
-var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
-    .data(datasets);
+//SVG container
+var svg_heatmap = d3.select('#svg_HeatMap')
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append('g')
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-datasetpicker.enter()
-    .append("input")
-    .attr("value", function (d) { return "Charger les données " })
-    .attr("type", "button")
-    .attr("class", "dataset-button")
-    .on("click", function (d) {
-        heatmapChart(d);
-    });
+
+
+// --------------------------------------------------------------- //
+// ---------------------------- Functions
+// --------------------------------------------------------------- //
+
+//Based on the heatmap example of: http://blockbuilder.org/milroc/7014412
+
+function draw_heatmap(date_filter) {
+
+    d3.select('#svg_HeatMap').selectAll('g').remove()
+
+    var svg_heatmap = d3.select('#svg_HeatMap')
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append('g')
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    var data_count = d3.nest()
+        .key(function (d) { return new Date(d.time_usec / 1000).getDay(); })
+        .key(function (d) { return new Date(d.time_usec).getHours(); })
+        .rollup(function (v) { return v.length; })
+        .entries(raw_data.filter(
+            ligne => (new Date(ligne.time_usec / 1000) >= date_filter[0]
+                && new Date(ligne.time_usec / 1000) <= date_filter[1])
+        ))
+
+    accidents = []
+    
+    for (yt in data_count) {
+        for (d in data_count[yt].values) {
+            accidents.push({
+                day: Number(data_count[yt].key) + 1,
+                hour: Number(data_count[yt].values[d].key) + 1,
+                count: data_count[yt].values[d].value
+            })
+
+        }
+    }
+
+    console.log(accidents)
+
+
+    var colorScale = d3.scaleLinear()
+        .domain([0, d3.max(accidents, function (d) { return d.count; }) / 2, d3.max(accidents, function (d) { return d.count; })])
+        .range(["#FFFFDD", "#3E9583", "#1F2D86"])
+
+    var dayLabels = svg_heatmap.selectAll(".dayLabel")
+        .data(days)
+        .enter().append("text")
+        .text(function (d) { return d; })
+        .attr("x", 0)
+        .attr("y", function (d, i) { return i * gridSize; })
+        .style("text-anchor", "end")
+        .attr("transform", "translate(-6," + gridSize / 1.5 + ")")
+        .attr("class", function (d, i) { return ((i >= 0 && i <= 4) ? "dayLabel mono axis axis-workweek" : "dayLabel mono axis"); });
+
+    var timeLabels = svg_heatmap.selectAll(".timeLabel")
+        .data(times)
+        .enter().append("text")
+        .text(function (d) { return d; })
+        .attr("x", function (d, i) { return i * gridSize; })
+        .attr("y", 0)
+        .style("text-anchor", "middle")
+        .attr("transform", "translate(" + gridSize / 2 + ", -6)")
+        .attr("class", function (d, i) { return ((i >= 8 && i <= 17) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+
+    var heatMap = svg_heatmap.selectAll(".hour")
+        .data(accidents)
+        .enter().append("rect")
+        .attr("x", function (d) { return (d.hour - 1) * gridSize; })
+        .attr("y", function (d) { return (d.day - 1) * gridSize; })
+        .attr("class", "hour bordered")
+        .attr("width", gridSize)
+        .attr("height", gridSize)
+        .style("stroke", "white")
+        .style("stroke-opacity", 0.6)
+        .style("fill", function (d) { return colorScale(d.count); });
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    //////////////// Create the gradient for the legend ///////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+    //Extra scale since the color scale is interpolated
+    var countScale = d3.scaleLinear()
+        .domain([0, d3.max(accidents, function (d) { return d.count; })])
+        .range([0, width])
+
+    //Calculate the variables for the temp gradient
+    var numStops = 10;
+    countRange = countScale.domain();
+    countRange[2] = countRange[1] - countRange[0];
+    countPoint = [];
+    for (var i = 0; i < numStops; i++) {
+        countPoint.push(i * countRange[2] / (numStops - 1) + countRange[0]);
+    }//for i
+
+    //Create the gradient
+    svg_heatmap.append("defs")
+        .append("linearGradient")
+        .attr("id", "legend-traffic")
+        .attr("x1", "0%").attr("y1", "0%")
+        .attr("x2", "100%").attr("y2", "0%")
+        .selectAll("stop")
+        .data(d3.range(numStops))
+        .enter().append("stop")
+        .attr("offset", function (d, i) {
+            return countScale(countPoint[i]) / width;
+        })
+        .attr("stop-color", function (d, i) {
+            return colorScale(countPoint[i]);
+        });
+
+    ///////////////////////////////////////////////////////////////////////////
+    ////////////////////////// Draw the legend ////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+    var legendWidth = Math.min(width * 0.8, 400);
+    //Color Legend container
+    var legendsvg = svg_heatmap.append("g")
+        .attr("class", "legendWrapper")
+        .attr("transform", "translate(" + (width / 2) + "," + (gridSize * days.length + 40) + ")");
+
+    //Draw the Rectangle
+    legendsvg.append("rect")
+        .attr("class", "legendRect")
+        .attr("x", -legendWidth / 2)
+        .attr("y", 0)
+        //.attr("rx", hexRadius*1.25/2)
+        .attr("width", legendWidth)
+        .attr("height", 10)
+        .style("fill", "url(#legend-traffic)");
+
+    //Append title
+    legendsvg.append("text")
+        .attr("class", "legendTitle")
+        .attr("x", 0)
+        .attr("y", -10)
+        .style("text-anchor", "middle")
+        .text("Number of  sites visited");
+
+    //Set scale for x-axis
+    var xScale = d3.scaleLinear()
+        .range([-legendWidth / 2, legendWidth / 2])
+        .domain([0, d3.max(accidents, function (d) { return d.count; })]);
+
+    //Define x-axis
+    var xAxis = d3.axisBottom()
+        .ticks(5)
+        //.tickFormat(formatPercent)
+        .scale(xScale);
+
+    //Set up X axis
+    legendsvg.append("g")
+        .attr("class", "axis")
+        .attr("transform", "translate(0," + (10) + ")")
+        .call(xAxis);
+}
+
+
+

@@ -1,16 +1,27 @@
 
-/*stacked bar
-*/
-console.log("data")
+// --------------------------------------------------------------- //
+// ---------------------------- svg_BarChart init
+// --------------------------------------------------------------- //
 
-var svg_BarChart = d3.select("#svg_BarChart"),
-  margin = { top: 20, right: 20, bottom: 30, left: 40 },
-  svg_BarChart_width =  +svg_BarChart.attr("width") - margin.left - margin.right,
-  svg_BarChart_height = +svg_BarChart.attr("height") - margin.top - margin.bottom,
-  g = svg_BarChart.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var margin = {
+  top: 50, right: 50, bottom: 1, left: 50
+};
+var svg_BarChart = d3.select("#svg_BarChart")
+var svg_BarChart_width = svg_BarChart.attr('width') - margin.left - margin.right - 20,
+svg_BarChart_height = svg_BarChart.attr('height')- margin.top - margin.bottom;
+
+//SVG container
+svg_BarChart.attr("width", svg_BarChart_width + margin.left + margin.right)
+    .attr("height", svg_BarChart_height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+g = svg_BarChart.append("g")
+
 
 var x0 = d3.scaleBand()
-  .rangeRound([0, svg_BarChart_width])
+  .rangeRound([0, svg_BarChart_width - 100])
   .paddingInner(0.05);
 
 var x1 = d3.scaleBand()
@@ -22,7 +33,18 @@ var y = d3.scaleLinear()
 var z = d3.scaleOrdinal()
   .range(["#98abc5", "#a05d56", "#d0743c", "#ff8c00", "#50e188", "#b53901", "#ef695e", "#296b84"]);
 
-d3.json('data_out_sample.json', (error, data) => {
+
+
+// --------------------------------------------------------------- //
+// ------------------------------  Functions 
+// --------------------------------------------------------------- //
+
+function draw_barchart(date_filter) {
+
+  var data = raw_data
+
+  //filter data
+  data = data.filter(ligne => ( new Date(ligne.time_usec / 1000) >= date_filter[0] && new Date(ligne.time_usec / 1000) <= date_filter[1]));
 
   // Nest stock values by symbol.
   var dataByYear = d3.nest()
@@ -30,14 +52,11 @@ d3.json('data_out_sample.json', (error, data) => {
     .key(function (d) { return d.category; })
     .rollup(function (v) { return v.length; })
     .entries(data);
-  /*console.log(dataByYear)
-  */
+
 
   dataByYear.forEach(y => {
-
     y.hour = y.key;
     delete y.key;
-
     y.values.forEach(d => {
       d.category = d.key;
       d.sum_price = +d.value;
@@ -51,7 +70,7 @@ d3.json('data_out_sample.json', (error, data) => {
 
   });
 
-  let symbolList = ["Learning", "TechReads", "Social", "Email", "Shopping", "TravelBookings", "Search", "Other"]
+  let symbolList = ["Learning", "TechReads", "Social", "Email", "Shopping", "Travel", "Search", "Other"]
 
   let yearList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
 
@@ -60,6 +79,8 @@ d3.json('data_out_sample.json', (error, data) => {
   y.domain([0, d3.max(dataByYear, d => { return d3.max(d.values, el => { return el.sum_price; }); })]).nice();
   z.domain(symbolList);
 
+  g.selectAll('g').remove()
+  
   var year = g.append("g")
     .selectAll("g")
     .data(dataByYear)
@@ -95,7 +116,7 @@ d3.json('data_out_sample.json', (error, data) => {
       .call(d3.axisLeft(y).ticks(null, "s"))
       .append("text")
       .attr("x", 2)
-      .attr("y", y(y.ticks().pop()) + 0.5)
+      .attr("y", y(y.ticks().pop()) + 10)
       .attr("dy", "0.32em")
       .attr("fill", "#000")
       .attr("font-weight", "bold")
@@ -132,6 +153,7 @@ d3.json('data_out_sample.json', (error, data) => {
 
   d3.selectAll("input").on("change", change);
 
+
   var timeout = setTimeout(() => {
     d3.select("input[value=\"grouped\"]").property("checked", true).each(change);
   }, 2000);
@@ -166,4 +188,5 @@ d3.json('data_out_sample.json', (error, data) => {
       .attr("width", x0.bandwidth());
   }
 
-});
+}
+

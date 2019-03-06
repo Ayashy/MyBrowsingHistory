@@ -1,4 +1,32 @@
 
+// --------------------------------------------------------------- //
+// ---------------------------- svg_TreeMap init
+// --------------------------------------------------------------- //
+var margin = {
+  top: 10, right: 10, bottom: 10, left: 10
+};
+var svg_TreeMap = d3.select("#svg_TreeMap"),
+  svg_TreeMap_width = svg_TreeMap.attr('width') - margin.left - margin.right,
+  svg_TreeMap_height = svg_TreeMap.attr('height') - margin.top - margin.bottom;
+
+svg_TreeMap.attr("width", svg_TreeMap_width + margin.left + margin.right)
+  .attr("height", svg_TreeMap_height + margin.top + margin.bottom)
+
+
+
+var fader = function (color) { return d3.interpolateRgb(color, "#fff")(0.2); },
+  color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
+  format = d3.format(",d");
+
+var treemap = d3.treemap()
+  .tile(d3.treemapResquarify)
+  .size([svg_TreeMap_width, svg_TreeMap_height])
+  .round(true)
+  .paddingInner(1);
+
+// --------------------------------------------------------------- //
+// ------------------ Functions
+// --------------------------------------------------------------- //
 
 function draw_MT(data, treemap, svg, color, format) {
 
@@ -125,24 +153,3 @@ function prepare_data(data) {
   data = reSortRoot(donnees_mod, "value");
   return data
 }
-
-d3.json("data_out_sample.json", function (data) {
-  window.all_data = data;
-
-  var svg_TreeMap = d3.select("#svg_TreeMap"),
-    svg_TreeMap_width = +svg_TreeMap.attr("width"),
-    svg_TreeMap_height = +svg_TreeMap.attr("height");
-
-  var fader = function (color) { return d3.interpolateRgb(color, "#fff")(0.2); },
-    color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
-    format = d3.format(",d");
-
-  var treemap = d3.treemap()
-    .tile(d3.treemapResquarify)
-    .size([svg_TreeMap_width, svg_TreeMap_height])
-    .round(true)
-    .paddingInner(1);
-
-  data = prepare_data(window.all_data);
-  draw_MT(data, treemap, svg_TreeMap, color, format);
-});
