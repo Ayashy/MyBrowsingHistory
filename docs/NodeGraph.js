@@ -62,7 +62,7 @@ function force_layout(date_filter) {
       donnee[site].counter += 1
     }
     else {
-      donnee[site] = { "url": site, 'id': idx, "counter": 1, icon: entry.favicon_url }
+      donnee[site] = { "url": site, 'id': idx, "counter": 1, icon: entry.favicon_url, prev_list : [] }
       idx = idx + 1
     }
 
@@ -70,6 +70,7 @@ function force_layout(date_filter) {
     var prev = undefined
     if (entry.page_transition == "LINK" && entries.reverse()[Number(i) - 1]!=undefined) {
       prev = entries.reverse()[Number(i) - 1].domain
+      donnee[site].prev_list.push(entries.reverse()[Number(i) - 1].domain)
     }
     donnee[site].prev = prev
 

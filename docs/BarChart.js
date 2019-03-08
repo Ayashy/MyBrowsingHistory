@@ -28,7 +28,7 @@ var x1 = d3.scaleBand()
   .padding(0.05);
 
 var y = d3.scaleLinear()
-  .rangeRound([svg_BarChart_height, 0]);
+  .rangeRound([svg_BarChart_height, 10]);
 
 var z = d3.scaleOrdinal()
   .range(["#98abc5", "#a05d56", "#d0743c", "#ff8c00", "#50e188", "#b53901", "#ef695e", "#296b84"]);
@@ -48,14 +48,14 @@ function draw_barchart(date_filter) {
 
   // Nest stock values by symbol.
   var dataByYear = d3.nest()
-    .key(function (d) { return d.hour; })
+    .key(function (d) { return new Date(d.time_usec / 1000).getMonth(); })
     .key(function (d) { return d.category; })
     .rollup(function (v) { return v.length; })
     .entries(data);
 
 
   dataByYear.forEach(y => {
-    y.hour = y.key;
+    y.month = y.key;
     delete y.key;
     y.values.forEach(d => {
       d.category = d.key;
@@ -72,7 +72,7 @@ function draw_barchart(date_filter) {
 
   let symbolList = ["Learning", "TechReads", "Social", "Email", "Shopping", "Travel", "Search", "Other"]
 
-  let yearList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
+  let yearList = [ "0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
 
   x0.domain(yearList);
   x1.domain(symbolList).rangeRound([0, x0.bandwidth()]);
@@ -85,7 +85,7 @@ function draw_barchart(date_filter) {
     .selectAll("g")
     .data(dataByYear)
     .enter().append("g")
-    .attr("transform", d => { return "translate(" + x0(d.hour) + ",0)"; })
+    .attr("transform", d => { return "translate(" + x0(d.month) + ",0)"; })
 
   var rect = year.selectAll("rect")
     .data(d => { return d.values; })
@@ -106,22 +106,36 @@ function draw_barchart(date_filter) {
   }
 
   let drawAxis = () => {
+    
     g.append("g")
-      .attr("class", "axis")
+      .attr("class", "axis axis--x")
       .attr("transform", "translate(0," + svg_BarChart_height + ")")
       .call(d3.axisBottom(x0));
+    
+    g.append("line")          // attach a line
+    .style("stroke", "black")  // colour the line
+    .attr("x1", 36)     // x position of the first end of the line
+    .attr("y1", svg_BarChart_height)      // y position of the first end of the line
+    .attr("x2", svg_BarChart_width - 100    )     // x position of the second end of the line
+    .attr("y2", svg_BarChart_height);
+
+    g.append("line")          // attach a line
+    .style("stroke", "black")  // colour the line
+    .attr("x1", 36)     // x position of the first end of the line
+    .attr("y1", svg_BarChart_height)      // y position of the first end of the line
+    .attr("x2", 36    )     // x position of the second end of the line
+    .attr("y2", 0);
 
     g.append("g")
       .attr("class", "axis")
-      .call(d3.axisLeft(y).ticks(null, "s"))
+      .call(d3.axisRight(y).ticks(null, "s"))
       .append("text")
-      .attr("x", 2)
+      .attr("x", -6)
       .attr("y", y(y.ticks().pop()) + 10)
       .attr("dy", "0.32em")
       .attr("fill", "#000")
       .attr("font-weight", "bold")
       .attr("text-anchor", "start")
-      .text("number of website");
   }
 
   let drawLegend = (data) => {

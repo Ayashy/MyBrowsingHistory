@@ -17,8 +17,9 @@
 <body>
 
 	<!-- Navigation -->
-	<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" style="background-color: rgb(56, 116, 177);"  id="mainNav">
-		<div class="container" >
+	<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase"
+		style="background-color: rgb(56, 116, 177);" id="mainNav">
+		<div class="container">
 			<a class="navbar-brand js-scroll-trigger" href="index.html"><img style="width:60%" src="image/logo.png">
 			</a>
 			<button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded"
@@ -52,7 +53,7 @@
 				<!--  ------------------  svg_TreeMap  -------------------- -->
 				<div class="col-lg-6 ">
 					<div class="card" style="margin:0px; border-width : 0">
-						<div class="card-header" style="background-color: rgb(56, 116, 177);">
+						<div class="card-header" style="background-color: rgb(56, 116, 177);" id="TreeMapTooltip">
 							<div class="float-left" style="font-weight:bold; font-size:20px; color: white">TreeMap</div>
 							<div class="float-right">
 							</div>
@@ -66,7 +67,7 @@
 				<!--  ------------------  svg_NodeGraph  -------------------- -->
 				<div class="col-lg-6 radius">
 					<div class="card" style="margin:0px; border-width : 0">
-						<div class="card-header" style="background-color: rgb(56, 116, 177);">
+						<div class="card-header" style="background-color: rgb(56, 116, 177);" id="NodeGraphTooltip">
 							<div class="float-left" style="font-weight:bold; font-size:20px; color: white">Node Graph
 							</div>
 						</div>
@@ -80,9 +81,12 @@
 			<div class="row">
 				<div class="col-lg-12 radius">
 					<div class="card" style="margin:0px; border-width : 0">
-						<div class="card-header" style="background-color: rgb(56, 116, 177);">
+						<div class="card-header" style="background-color: rgb(56, 116, 177);" id="DateSliderTooltip">
 							<div class="float-left" style="font-weight:bold; font-size:20px; color: white">
 								Date slider
+							</div>
+							<div class="float-right">
+								<div id='currentdate'></div>
 							</div>
 						</div>
 						<div class="card-body">
@@ -95,7 +99,7 @@
 				<!--  ------------------  svg_BarChart  -------------------- -->
 				<div class="col-lg-6 radius">
 					<div class="card" style="margin:0px; border-width : 0">
-						<div class="card-header" style="background-color: rgb(56, 116, 177);">
+						<div class="card-header" style="background-color: rgb(56, 116, 177);" id="BarChartTooltip">
 							<div class="float-left" style="font-weight:bold; font-size:20px; color: white">
 								Stacked Bar Chart
 							</div>
@@ -112,7 +116,7 @@
 				<!--  ------------------  svg_HeatMap  -------------------- -->
 				<div class="col-lg-6 radius">
 					<div class="card" style="margin:0px; border-width : 0">
-						<div class="card-header" style="background-color: rgb(56, 116, 177);">
+						<div class="card-header" style="background-color: rgb(56, 116, 177);" id="HeatMapTooltip">
 							<div class="float-left" style="font-weight:bold; font-size:20px; color: white">
 								HeatMap
 
@@ -147,9 +151,22 @@
 
 	<script>
 
+		NodeGraphInfo = "Ce graph permet de visualiser les transition entre les pages web pendant la navigation."
+			+ "Chaque noeud représente un nom de domaine visité (ex: Google), et les liaisons "
+			+ "représentent les navigations entre les noeuds. Mettre la souris sur un noeud permet "
+			+ "d'avoir plus d'informations sur celui ci. "
+		TreeMapInfo = "La carte proportionnelle représente les proportions de visite de chaque domaine sous forme"
+			+ "de rectangles à surfaces variées. Les domaines sont regroupés en catégories. Mettre la souris"
+			+ " sur un rectangle afficher plus d'informations."
+		DateSliderInfo = "Le slider permet de filter les données représentés par les graphes selon la date. Il est"
+			+ " possible de choisir la plage de temps désirée en cliquant sur le slider."
+		HeatMapInfo = "La heatmap met en évidence les zones « foncés » d’une page, autrement dit les zones horaires avec le plus traffic, le cumul de clique  permet de détecter facilement les zones horaires à améliorer. C’est un outil qui permet de restituer et d’analyser le parcours de nos visites par l’intermédiaire de nos clics. Le but principal est d'aider à nous apprendre comment notre activité internet peut affecter notre routine journaliere, notre sommeil et notre vie sociale"
+		BarChartInfo = "Le bar chart représente le nombre de visites par catégories en fonction du temps. L'affichage"
+			+ " Stacked affiche les proportions une par dessus l'autre, alors que Grouped sous forme de lignes"
+
 		var raw_data = undefined
 
-		d3.json("data_out_agg_2.json", function (data) {
+		d3.json("data_out_agg.json", function (data) {
 
 			raw_data = data
 
@@ -163,6 +180,77 @@
 			draw_heatmap([new Date(2013, 2, 1), new Date(2020, 7, 15)])
 
 		});
+
+
+		var BarChartTooltip = d3.select("#BarChartTooltip")
+			.append('div')
+			.attr('class', ' tooltip')
+			.style('visibility', 'hidden')
+
+		d3.select("#BarChartTooltip").on('mousemove', function (d, i) {
+			BarChartTooltip.style('visibility', 'visible')
+				.attr('style', 'left:' + (0) + 'px; top:' + (50) + 'px')
+				.html(BarChartInfo);
+		}).on('mouseout', function () {
+			BarChartTooltip.style('visibility', 'hidden')
+		})
+
+
+		var HeatMapTooltip = d3.select("#HeatMapTooltip")
+			.append('div')
+			.attr('class', ' tooltip')
+			.style('visibility', 'hidden')
+
+		d3.select("#HeatMapTooltip").on('mousemove', function (d, i) {
+			HeatMapTooltip.style('visibility', 'visible')
+				.attr('style', 'left:' + (0) + 'px; top:' + (50) + 'px')
+				.html(HeatMapInfo);
+		}).on('mouseout', function () {
+			HeatMapTooltip.style('visibility', 'hidden')
+		})
+
+
+		var NodeGraphTooltip = d3.select("#NodeGraphTooltip")
+			.append('div')
+			.attr('class', ' tooltip')
+			.style('visibility', 'hidden')
+
+		d3.select("#NodeGraphTooltip").on('mousemove', function (d, i) {
+			NodeGraphTooltip.style('visibility', 'visible')
+				.attr('style', 'left:' + (0) + 'px; top:' + (50) + 'px')
+				.html(NodeGraphInfo);
+		}).on('mouseout', function () {
+			NodeGraphTooltip.style('visibility', 'hidden')
+		})
+
+
+		var DateSliderTooltip = d3.select("#DateSliderTooltip")
+			.append('div')
+			.attr('class', ' tooltip')
+			.style('visibility', 'hidden')
+
+		d3.select("#DateSliderTooltip").on('mousemove', function (d, i) {
+			DateSliderTooltip.style('visibility', 'visible')
+				.attr('style', 'left:' + (0) + 'px; top:' + (50) + 'px')
+				.html(DateSliderInfo);
+		}).on('mouseout', function () {
+			DateSliderTooltip.style('visibility', 'hidden')
+		})
+
+
+		var TreeMapTooltip = d3.select("#TreeMapTooltip")
+			.append('div')
+			.attr('class', ' tooltip')
+			.style('visibility', 'hidden')
+
+		d3.select("#TreeMapTooltip").on('mousemove', function (d, i) {
+			TreeMapTooltip.style('visibility', 'visible')
+				.attr('style', 'left:' + (0) + 'px; top:' + (50) + 'px')
+				.html(TreeMapInfo);
+		}).on('mouseout', function () {
+			TreeMapTooltip.style('visibility', 'hidden')
+		})
+
 
 	</script>
 </body>

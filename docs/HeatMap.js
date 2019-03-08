@@ -43,7 +43,7 @@ function draw_heatmap(date_filter) {
     
     var data_count = d3.nest()
         .key(function (d) { return new Date(d.time_usec / 1000).getDay(); })
-        .key(function (d) { return new Date(d.time_usec).getHours(); })
+        .key(function (d) { return new Date(d.time_usec/1000).getHours(); })
         .rollup(function (v) { return v.length; })
         .entries(raw_data.filter(
             ligne => (new Date(ligne.time_usec / 1000) >= date_filter[0]

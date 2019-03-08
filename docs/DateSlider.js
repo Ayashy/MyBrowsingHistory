@@ -69,12 +69,27 @@ function brushended() {
     // --------------------------------------------------------------------------------------
 
     force_layout(d1)
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+    
+        return [year, month, day].join('-');
+    }
 
     // --------------------------------------------------------------------------------------
     // ------------------------------ CHANGES TO TREEMAP ------------------------------------
     // --------------------------------------------------------------------------------------
-
-
+    d3.select("#currentdate").selectAll("p").remove()
+    d3.select("#currentdate").append("p")
+    .attr("id", "myNewParagrap")
+    .append("text")
+    .text(formatDate(d1[0])+"  -  "+formatDate(d1[1]))
+    .attr("font-color", "white")
 
     data = filter_data(d1[0], d1[1], raw_data)
 
