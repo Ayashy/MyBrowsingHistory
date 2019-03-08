@@ -1,97 +1,140 @@
 <!DOCTYPE html>
 
+
 <head>
 	<meta charset="utf-8">
-	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<link href="css/freelancer.min.css" rel="stylesheet">
+	<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet"
+		type="text/css">
 	<script src="https://d3js.org/d3.v4.min.js"></script>
+
 </head>
 
-<body background="image/background.jpg">
+<body>
 
-	<!--  ------------------  TOP BAR  -------------------- -->
-	<header>
-		<div class="container">
-			<div class="row logo" background="background.jpg">
-				<img src="image/logo.png">
-			</div>
-			<div class="row menu">
-				<ul>
-					<li><a href="index.html">Home</a></li>
-					<li><a href="dashboard.html">Dashboard</a></li>
-					<li><a href="treemap.html">Treemap</a></li>
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" style="background-color: rgb(56, 116, 177);"  id="mainNav">
+		<div class="container" >
+			<a class="navbar-brand js-scroll-trigger" href="index.html"><img style="width:60%" src="image/logo.png">
+			</a>
+			<button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded"
+				type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+				aria-expanded="false" aria-label="Toggle navigation">
+				Menu
+				<i class="fas fa-bars"></i>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item mx-0 mx-lg-1">
+						<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="index.html">Home</a>
+					</li>
+					<li class="nav-item mx-0 mx-lg-1">
+						<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+							href="dashboard.html">Dashboard</a>
+					</li>
+					<li class="nav-item mx-0 mx-lg-1">
+						<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="about.html">Data guide</a>
+					</li>
 				</ul>
 			</div>
 		</div>
-	</header>
+	</nav>
 
-
-	<!--  ------------------  DASHBOARD CONTAINER -------------------- -->
-
-	<div class="container" >
-		<div class="row" >
-			<!--  ------------------  svg_TreeMap  -------------------- -->
-			<div class="col-lg-6 radius">
-				<div class="card" style="margin:0px">
-					<div class="card-header">
-						TreeMap
-						<input type="radio" name="mode" value="sumBySize" checked> Size
-						<input type="radio" name="mode" value="sumByCount"> Count
+	<section class="portfolio" id="portfolio"
+		style="margin-top: 3% ;padding-bottom: 3%; background-color: rgba(24, 188, 156, 0.9);">
+		<!--  ------------------  DASHBOARD CONTAINER -------------------- -->
+		<div class="container">
+			<div class="row">
+				<!--  ------------------  svg_TreeMap  -------------------- -->
+				<div class="col-lg-6 ">
+					<div class="card" style="margin:0px; border-width : 0">
+						<div class="card-header" style="background-color: rgb(56, 116, 177);">
+							<div class="float-left" style="font-weight:bold; font-size:20px; color: white">TreeMap</div>
+							<div class="float-right">
+							</div>
+						</div>
+						<div id="brush"></div>
+						<div class="card-body">
+							<svg id="svg_TreeMap" width="500" height="250"></svg>
+						</div>
 					</div>
-					<div id="brush"></div>
-					<div class="card-body" >
-						<svg id="svg_TreeMap" width="500" height="250"></svg>
+				</div>
+				<!--  ------------------  svg_NodeGraph  -------------------- -->
+				<div class="col-lg-6 radius">
+					<div class="card" style="margin:0px; border-width : 0">
+						<div class="card-header" style="background-color: rgb(56, 116, 177);">
+							<div class="float-left" style="font-weight:bold; font-size:20px; color: white">Node Graph
+							</div>
+						</div>
+						<div class="card-body">
+							<svg id="svg_NodeGraph" width="500" height="250"></svg>
+						</div>
 					</div>
 				</div>
 			</div>
-			<!--  ------------------  svg_NodeGraph  -------------------- -->
-			<div class="col-lg-6 radius">
-				<div class="card" style="margin:1px">
-					<div class="card-header">
-						Node Graph
+			<!--  ------------------  svg_DateSlider  -------------------- -->
+			<div class="row">
+				<div class="col-lg-12 radius">
+					<div class="card" style="margin:0px; border-width : 0">
+						<div class="card-header" style="background-color: rgb(56, 116, 177);">
+							<div class="float-left" style="font-weight:bold; font-size:20px; color: white">
+								Date slider
+							</div>
+						</div>
+						<div class="card-body">
+							<svg id="svg_DateSlider" width="1100" height="100"></svg>
+						</div>
 					</div>
-					<div class="card-body">
-						<svg id="svg_NodeGraph" width="500" height="250"></svg>
+				</div>
+			</div>
+			<div class="row">
+				<!--  ------------------  svg_BarChart  -------------------- -->
+				<div class="col-lg-6 radius">
+					<div class="card" style="margin:0px; border-width : 0">
+						<div class="card-header" style="background-color: rgb(56, 116, 177);">
+							<div class="float-left" style="font-weight:bold; font-size:20px; color: white">
+								Stacked Bar Chart
+							</div>
+							<div class="float-right">
+								<input type="radio" name="mode" value="stacked" checked> Stacked
+								<input type="radio" name="mode" value="grouped"> Grouped
+							</div>
+						</div>
+						<div class="card-body">
+							<svg id="svg_BarChart" width="600" height="250"></svg>
+						</div>
+					</div>
+				</div>
+				<!--  ------------------  svg_HeatMap  -------------------- -->
+				<div class="col-lg-6 radius">
+					<div class="card" style="margin:0px; border-width : 0">
+						<div class="card-header" style="background-color: rgb(56, 116, 177);">
+							<div class="float-left" style="font-weight:bold; font-size:20px; color: white">
+								HeatMap
+
+							</div>
+						</div>
+						<div class="card-body">
+							<svg id="svg_HeatMap" width="600" height="200"></svg>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</section>
 
-		<!--  ------------------  svg_DateSlider  -------------------- -->
-		<div class="row">
-			<div class="col-lg-12 radius">
-				<div class="card" style="margin:1px">
-					<div class="card-header">Date slider</div>
-					<div class="card-body">
-						<svg id="svg_DateSlider" width="1100" height="100"></svg>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<!--  ------------------  svg_BarChart  -------------------- -->
-			<div class="col-lg-6 radius">
-				<div class="card" style="margin:1px">
-					<div class="card-header">
-						Stacked Bar Chart
-						<input type="radio" name="mode" value="stacked" checked> Stacked
-						<input type="radio" name="mode" value="grouped"> Grouped
-					</div>
-					<div class="card-body">
-						<svg id="svg_BarChart" width="600" height="250"></svg>
-					</div>
-				</div>
-			</div>
-			<!--  ------------------  svg_HeatMap  -------------------- -->
-			<div class="col-lg-6 radius">
-				<div class="card" style="margin:1px">
-					<div class="card-header">HeatMap</div>
-					<div class="card-body">
-						<svg id="svg_HeatMap" width="600" height="200"></svg>
-					</div>
-				</div>
-			</div>
+	<!--  ------------------  Footer  -------------------- -->
+	<div class="copyright py-4 text-center text-white" style="font-size:120%">
+		<div class="container">
+			<small>
+				Copyright &copy;
+				<a href="https://ayashy.github.io/MyBrowsingHistory">ayashy.github.io/MyBrowsingHistory</a>
+				2019
+			</small>
 		</div>
 	</div>
 
@@ -106,24 +149,20 @@
 
 		var raw_data = undefined
 
-		d3.json("data_out_sample.json", function (data) {
+		d3.json("data_out_agg_2.json", function (data) {
+
+			raw_data = data
 
 			entries = data
 			force_layout([new Date(2013, 2, 1), new Date(2020, 7, 15) - 1]);
 
-			window.all_data = data;
-			treemap_data = prepare_data(window.all_data);
+			treemap_data = prepare_data(raw_data);
 			draw_MT(treemap_data, treemap, svg_TreeMap, color, format);
 
-			raw_data = data
 			draw_barchart([new Date(2013, 2, 1), new Date(2020, 7, 15)])
 			draw_heatmap([new Date(2013, 2, 1), new Date(2020, 7, 15)])
 
-
 		});
 
-
-
 	</script>
-
 </body>

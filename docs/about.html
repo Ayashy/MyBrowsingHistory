@@ -1,60 +1,141 @@
 <!DOCTYPE html>
+
 <head>
-  <meta charset="utf-8">
-  <script src="https://d3js.org/d3.v4.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <style>
-    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
-  </style>
+	<meta charset="utf-8">
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link href="css/freelancer.min.css" rel="stylesheet">
+	<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet"
+		type="text/css">
+
+	<!-- Plugin CSS -->
+	<link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
 </head>
 
 <body>
-<header>
-	<div class="container">
-		<div class="row logo">
-		    <img src="image/logo.png">
-	    </div>
-	    <div class="row menu">
-		    <ul>
-			  <li><a href="index.html">Home</a></li>
-			  <li><a href="dashboard.html">Dashboard</a></li>
-			  <li><a href="about.html">About</a></li>
-			</ul>
-	    </div>
-	</div>
-</header>
-<div class="container">
-	<div class="row">
-		<div class="col-lg-12">
-			<div class="titre">
-				Diagramme de séquence
-			</div>
-			<div class="graphe">
-				<img src="">
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-lg-6">
-			<div class="titre">
-				Tree Map
-			</div>
-			<div class="graphe">
-				<img src="image/viz.png">
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+		<div class="container">
+			<a class="navbar-brand js-scroll-trigger" href="index.html"><img style="width:60%" src="image/logo.png">
+			</a>
+			<button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button"
+				data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+				aria-label="Toggle navigation">
+				Menu
+				<i class="fas fa-bars"></i>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item mx-0 mx-lg-1">
+						<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="index.html">Home</a>
+					</li>
+					<li class="nav-item mx-0 mx-lg-1">
+						<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="dashboard.html">Dashboard</a>
+					</li>
+					<li class="nav-item mx-0 mx-lg-1">
+						<a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="about.html">Data guide</a>
+					</li>
+				</ul>
 			</div>
 		</div>
-		<div class="col-lg-6">
-			<div class="titre">
-				Stacked bar chart
+	</nav>
+
+
+	<!-- Header -->
+	<header class="masthead bg-primary text-white text-center">
+		<div class="container">
+			<img class="img-fluid mb-5 d-block mx-auto" style="width:10%" src="" alt="">
+			<h1 class="text-uppercase mb-0">My browsing History</h1>
+			<hr class="star-light">
+			<h2 class="font-weight-light mb-0">A DataViz project that helps explore your browser history</h2>
+		</div>
+	</header>
+
+	<section class="portfolio" id="portfolio">
+		<div class="container">
+			<h2 class="text-center text-uppercase text-secondary mb-0">About the project</h2>
+			<hr class="star-dark mb-5">
+			<div class="row">
+				<div class="col-lg-12 ml-auto">
+					<p class="lead">
+						Depuis plusieurs années, Google est devenu un géant de la data. A travers l’utilisation
+						de ses services, qui sont devenus indispensable à notre vie quotidienne, l’entreprise collecte
+						une quantité énorme de données de chaque individu et les stocke dans des data centers
+						afin de les analyser et connaître le profil de chaque utilisateur de ses services. Google
+						en sait donc bien plus que nous l’imaginons à notre sujet. Et c’est pourquoi, à travers
+						ce projet, nous voulons récupérer une partie de nos données stockées chez Google, la
+						traiter et l’analyser à notre manière, pour avoir un aperçu de ce que nous pouvons sortir
+						de ses données bruts avec des outils de traitements, d’analyses et de visualisation. Ce
+						sous ensemble de nos données est notre historique de recherche sur le navigateur Google
+						Chrome.
+					</p>
+				</div>
 			</div>
-			<div class="graphe">
-				<img src="">
+	</section>
+
+	<section class="portfolio" id="portfolio">
+		<div class="container">
+			<h2 class="text-center text-uppercase text-secondary mb-0">Data collection</h2>
+			<hr class="star-dark mb-5">
+			<div class="row">
+				<div class="col-lg-12 ml-auto">
+					<p class="lead">
+						<p class="lead">
+							Afin de répondre à ces questions, nous avons besoin de nos historiques respectifs de
+							navigation, qui sont collectés et stockés via le service Google Chrome, et sont à disposition
+							de tout utilisateur désirant les télécharger sur son compte. En effet, Google nous donne
+							accès à ces informations, et nous permet de les avoir sous forme de fichiers JSON
+						</p>
+						<p class="lead">
+							On suit les instructions qui sont bien définies sur ” ce lien”, dans le site d’assistance
+							officielle de Google.
+						</p>
+
+					</p>
+				</div>
 			</div>
+	</section>
+
+
+	<header class="masthead bg-primary text-white text-center" style="padding:2%">
+		<div class="container">
+
+				<h1 class="text-uppercase mb-0" style="font-size:300%">The team</h1>
+				<hr class="star-light">
+				<h2 class="font-weight-light mb-0"></h2>
+
+
+			<div class="row">
+				<div class="col-lg-4 ml-auto">
+					<img class="img-fluid mb-5 d-block mx-auto" style="width:30%; font-size:50%" src="image/amine.png" alt="">
+					<h2 class="font-weight-light mb-0">AYASSI Reda</h2>
+
+				</div>
+				<div class="col-lg-4 ml-auto">
+					<img class="img-fluid mb-5 d-block mx-auto" style="width:30%" src="image/amine.png" alt="">
+					<h2 class="font-weight-light mb-0">CHIBAN Amine</h2>
+
+				</div>
+				<div class="col-lg-4 ml-auto">
+					<img class="img-fluid mb-5 d-block mx-auto" style="width:30%" src="image/jaafar.gif" alt="">
+					<h2 class="font-weight-light mb-0">BEN ABDERREZAK Jaafar</h2>
+
+				</div>
+			</div>
+
+			
+		</div>
+	</header>
+
+	<div class="copyright py-4 text-center text-white">
+		<div class="container">
+			<small>Copyright &copy; <a
+					href="https://ayashy.github.io/MyBrowsingHistory">ayashy.github.io/MyBrowsingHistory</a>
+				2019</small>
 		</div>
 	</div>
-</div>
-<footer>
-	
-</footer>
 </body>

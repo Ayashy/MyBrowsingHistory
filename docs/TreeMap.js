@@ -9,6 +9,9 @@ var svg_TreeMap = d3.select("#svg_TreeMap"),
   svg_TreeMap_width = svg_TreeMap.attr('width') - margin.left - margin.right,
   svg_TreeMap_height = svg_TreeMap.attr('height') - margin.top - margin.bottom;
 
+  d3.select("#svg_TreeMap").selectAll("g").remove();
+
+  
 svg_TreeMap.attr("width", svg_TreeMap_width + margin.left + margin.right)
   .attr("height", svg_TreeMap_height + margin.top + margin.bottom)
 
@@ -35,6 +38,7 @@ function draw_MT(data, treemap, svg, color, format) {
     .sum(sumBySize)
     .sort(function (a, b) { return b.height - a.height || b.value - a.value; });
 
+    console.log(d3.hierarchy(data))
   treemap(root);
 
   var cell = svg.selectAll("g")
@@ -121,7 +125,7 @@ function reSortRoot(root, value_key) {
 }
 
 function filter_data(date_min, date_max, data) {
-  data = data.filter(ligne => (new Date(ligne.date) > date_min && new Date(ligne.date) < date_max));
+  data = data.filter(ligne => (new Date(ligne.date) >= date_min && new Date(ligne.date) <= date_max));
   return data;
 }
 
@@ -141,7 +145,7 @@ function formatDate(date) {
 function prepare_data(data) {
   var donnees = d3.nest()
     .key(function (d) { return d.category; })
-    .key(function (d) { return d.domain; })
+    .key(function (d) { return d.domain })
     .rollup(function (v) { return v.length; })
     .entries(data);
 

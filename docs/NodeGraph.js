@@ -22,7 +22,9 @@ var link = svg_NodeGraph.selectAll(".link"),
 
 var simulation;
 
-var tooltip = d3.select("body").append('div')
+var tooltip = svg_NodeGraph.select(function() {
+  return this.parentNode;
+}).append('div')
   .attr('class', ' tooltip')
   .style('visibility', 'hidden')
 
@@ -54,7 +56,7 @@ function force_layout(date_filter) {
     if (date < date_filter[0] || date > date_filter[1])
       continue;
 
-    var site = entry.url.split('/')[2]
+    var site = entry.domain
     // Adding the node
     if (site in donnee) {
       donnee[site].counter += 1
@@ -66,8 +68,8 @@ function force_layout(date_filter) {
 
     // Adding the link
     var prev = undefined
-    if (entry.page_transition == "LINK") {
-      prev = entries.reverse()[Number(i) - 1].url.split('/')[2]
+    if (entry.page_transition == "LINK" && entries.reverse()[Number(i) - 1]!=undefined) {
+      prev = entries.reverse()[Number(i) - 1].domain
     }
     donnee[site].prev = prev
 
@@ -137,7 +139,7 @@ function force_layout(date_filter) {
       });
 
       tooltip.style('visibility', 'visible')
-        .attr('style', 'left:' + (mouse[0]) + 'px; top:' + (mouse[1] + 15) + 'px')
+        .attr('style', 'left:' + (mouse[0]+10) + 'px; top:' + (mouse[1] + 15) + 'px')
         .html(graph.nodes[i].url);
     })
     .on('mouseout', function () {
@@ -147,7 +149,7 @@ function force_layout(date_filter) {
     .attr("class", "node")
 
   node.append("circle")
-    .attr("r", function (d) { return d.size + 1; })
+    .attr("r", function (d) { return svg_BarChart_height*0.05; })
 
   node.append("image")
     .attr("xlink:href", function (d) { return d.icon; })

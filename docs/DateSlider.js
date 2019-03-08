@@ -16,14 +16,14 @@ svg_DateSlider.attr("width", svg_DateSlider_width + margin.left + margin.right)
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var x = d3.scaleTime()
-    .domain([new Date(2018, 1, 1), new Date(2018, 12, 15) - 1])
+    .domain([new Date(2017, 12, 30), new Date(2018, 12, 1) ])
     .rangeRound([0, svg_DateSlider_width]);
 
 svg_DateSlider.append("g")
     .attr("class", "axis axis--grid")
     .attr("transform", "translate(0," + svg_DateSlider_height + ")")
     .call(d3.axisBottom(x)
-        .ticks(d3.timeHour, 12)
+        .ticks(d3.timeWeek)
         .tickSize(-svg_DateSlider_height)
         .tickFormat(function () { return null; }))
     .selectAll(".tick")
@@ -74,10 +74,11 @@ function brushended() {
     // ------------------------------ CHANGES TO TREEMAP ------------------------------------
     // --------------------------------------------------------------------------------------
 
-    range_min = new Date(formatDate(d1[0]));
-    range_max = new Date(formatDate(d1[1]))
 
-    data = filter_data(range_min, range_max, window.all_data)
+
+    data = filter_data(d1[0], d1[1], raw_data)
+
+    console.log(data.length)
 
     var data = d3.nest()
         .key(function (d) { return d.category; })
@@ -95,17 +96,6 @@ function brushended() {
     d3.select("#svg_TreeMap").selectAll("g").remove();
 
     var svg_TREEMAP = d3.select("#svg_TreeMap")
-
-
-    var fader = function (color) { return d3.interpolateRgb(color, "#fff")(0.2); },
-        color = d3.scaleOrdinal(d3.schemeCategory20.map(fader)),
-        format = d3.format(",d");
-
-    var treemap = d3.treemap()
-        .tile(d3.treemapResquarify)
-        .size([svg_DateSlider_width, svg_DateSlider_height])
-        .round(true)
-        .paddingInner(1);
 
     draw_MT(data, treemap, svg_TREEMAP, color, format)
 

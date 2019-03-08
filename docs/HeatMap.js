@@ -63,9 +63,6 @@ function draw_heatmap(date_filter) {
         }
     }
 
-    console.log(accidents)
-
-
     var colorScale = d3.scaleLinear()
         .domain([0, d3.max(accidents, function (d) { return d.count; }) / 2, d3.max(accidents, function (d) { return d.count; })])
         .range(["#FFFFDD", "#3E9583", "#1F2D86"])
